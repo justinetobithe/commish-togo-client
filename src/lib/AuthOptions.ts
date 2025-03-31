@@ -57,6 +57,7 @@ const AuthOptions: AuthOptions = {
             last_name: user.last_name ?? "",
             auth_token: response.data.token,
             phone: user.phone ?? "",
+            id: user.id as string,
           };
         }
 

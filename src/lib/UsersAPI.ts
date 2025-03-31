@@ -5,7 +5,7 @@ import { UserPaginatedData } from '@/types/User';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import User from '@/types/User';
 import { UserInput } from '@/components/AppUserForm';
-import { ProfileFormInputs } from '@/app/(protected)/profile/components/ProfileForm'
+import { ProfileFormInputs } from '@/app/(protected)/profile/components/AppProfileForm'
 import { getServerSession } from 'next-auth';
 import AuthOptions from '@/lib/AuthOptions';
 
@@ -49,12 +49,32 @@ export const useUsers = (
   });
 
 export const createUser = async (inputs: UserInput): Promise<Response> => {
-  const response = await api.post<Response>(`/api/user`, inputs);
+  const response = await api.post<Response>(`/api/user`, inputs, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
-export const updateUser = async (id: string, inputs: UserInput | ProfileFormInputs): Promise<Response> => {
-  const response = await api.put<Response>(`/api/user/${id}`, inputs);
+export const updateUser = async (id: string, inputs: UserInput | ProfileFormInputs | FormData): Promise<Response> => {
+
+  const formData = new FormData();
+  Object.entries(inputs).forEach(([key, value]) => {
+    if (value instanceof File) {
+      formData.append(key, value);
+    } else {
+      formData.append(key, value as string);
+    }
+  });
+
+  formData.append('_method', 'PUT');
+
+  const response = await api.post<Response>(`/api/user/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 

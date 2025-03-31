@@ -18,14 +18,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import AppTable from '@/components/AppTable';
 import { ArrowUpDown, Pencil, Trash } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Strand } from '@/types/Strand';
-import { useDeleteStrand, useUpdateStrand, useStrands } from '@/lib/StrandAPI';
+import { Service } from '@/types/Service';
+import { useDeleteService, useServices, useUpdateService } from '@/lib/ServiceAPI';
 import AppConfirmationDialog from './AppConfirmationDialog';
 import { toast } from '@/components/ui/use-toast';
-import AppStrandForm from './AppStrandForm';
+import AppServicesForm from './AppServicesForm';
 import { useQueryClient } from '@tanstack/react-query';
 
-export default function AppStrandsTable() {
+export default function AppServicesTable() {
     const queryClient = useQueryClient();
     const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -34,9 +34,9 @@ export default function AppStrandsTable() {
     const [searchKeyword, setSearchKeyword] = React.useState('');
     const [sorting, setSorting] = useState<SortingState>([]);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-    const [selectedStrand, setSelectedStrand] = useState<Strand | null>(null);
+    const [selectedService, setSelectedService] = useState<Service | null>(null);
 
-    const { data, isLoading } = useStrands(
+    const { data, isLoading } = useServices(
         pageIndex + 1,
         pageSize,
         searchKeyword,
@@ -44,23 +44,23 @@ export default function AppStrandsTable() {
         Boolean(sorting.map((item) => item.desc).join(','))
     );
 
-    const { mutate } = useDeleteStrand();
-    const { mutate: updateStrand } = useUpdateStrand();
+    const { mutate } = useDeleteService();
+    const { mutate: updateService } = useUpdateService();
 
-    const handleEditStrand = (strand: Strand) => {
-        setSelectedStrand(strand);
+    const handleEditService = (service: Service) => {
+        setSelectedService(service);
         setIsEditDialogOpen(true);
     };
 
-    const handleDeleteStrand = (id: number) => {
+    const handleDeleteService = (id: number) => {
         mutate(id, {
             onSettled: () => {
-                queryClient.invalidateQueries({ queryKey: ['strands'] });
+                queryClient.invalidateQueries({ queryKey: ['services'] });
             }
         });
     };
 
-    const columns: ColumnDef<Strand>[] = [
+    const columns: ColumnDef<Service>[] = [
         {
             accessorKey: 'name',
             header: ({ column }) => (
@@ -69,7 +69,7 @@ export default function AppStrandsTable() {
                     className='pl-0 text-left hover:!bg-transparent'
                     onClick={() => column.toggleSorting()}
                 >
-                    Strand
+                    Name
                     <ArrowUpDown className='ml-2 h-4 w-4' />
                 </Button>
             ),
@@ -77,18 +77,18 @@ export default function AppStrandsTable() {
             enableSorting: true,
         },
         {
-            accessorKey: 'acronym',
+            accessorKey: 'description',
             header: ({ column }) => (
                 <Button
                     variant='ghost'
                     className='pl-0 text-left hover:!bg-transparent'
                     onClick={() => column.toggleSorting()}
                 >
-                    Acronym
+                    Description
                     <ArrowUpDown className='ml-2 h-4 w-4' />
                 </Button>
             ),
-            cell: ({ row }) => row.original.acronym,
+            cell: ({ row }) => row.original.description,
             enableSorting: true,
         },
         {
@@ -103,7 +103,7 @@ export default function AppStrandsTable() {
                                     type='button'
                                     variant="outline"
                                     className="mr-2"
-                                    onClick={() => handleEditStrand(row.original)}
+                                    onClick={() => handleEditService(row.original)}
                                 >
                                     <Pencil className="h-4 w-4" />
                                 </Button>
@@ -114,14 +114,14 @@ export default function AppStrandsTable() {
                         </Tooltip>
                     </TooltipProvider>
                     <AppConfirmationDialog
-                        title='Delete Strand'
-                        description={`Are you sure you want to delete the strand "${row.original.name}"? This action cannot be undone.`}
+                        title='Delete Service'
+                        description={`Are you sure you want to delete the service "${row.original.name}"? This action cannot be undone.`}
                         buttonElem={
                             <Button className="text-white" variant="destructive" type='button'>
                                 <Trash size={20} />
                             </Button>
                         }
-                        handleDialogAction={() => handleDeleteStrand(row.original.id!)}
+                        handleDialogAction={() => handleDeleteService(row.original.id!)}
                     />
                 </div>
             ),
@@ -155,9 +155,9 @@ export default function AppStrandsTable() {
     return (
         <div>
             <AppTable table={table} />
-            {selectedStrand && (
-                <AppStrandForm
-                    data={selectedStrand}
+            {selectedService && (
+                <AppServicesForm
+                    data={selectedService}
                     isOpen={isEditDialogOpen}
                     onClose={() => setIsEditDialogOpen(false)}
                     queryClient={queryClient}

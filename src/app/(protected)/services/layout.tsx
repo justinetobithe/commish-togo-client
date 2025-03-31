@@ -1,10 +1,8 @@
 import AuthOptions from '@/lib/AuthOptions';
 import { getServerSession } from 'next-auth';
-import React, { FC } from 'react';
+import React from 'react';
 
-const Layout: FC<{
-  admin: React.ReactNode;
-}> = async ({ admin }) => {
+const Layout = async ({ admin }: { admin: React.ReactNode }) => {
   const session = await getServerSession(AuthOptions);
 
   const renderContent = () => {

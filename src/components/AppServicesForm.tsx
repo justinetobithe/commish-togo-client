@@ -13,36 +13,37 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
-import { useCreateStrand, useUpdateStrand } from '@/lib/StrandAPI';
+import { useCreateService, useUpdateService } from '@/lib/ServiceAPI';
 import AppSpinner from './AppSpinner';
 import { QueryClient } from '@tanstack/react-query';
-import { Strand } from '@/types/Strand';
+import { Service } from '@/types/Service';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Textarea } from './ui/textarea';
 
-const strandSchema = z.object({
+const serviceSchema = z.object({
     id: z.number().optional(),
     name: z.string().min(3, { message: 'Name is required' }),
-    acronym: z.string().min(3, { message: 'Acronym is required' }),
+    description: z.string().min(3, { message: 'Description is required' }),
 });
 
-export type StrandInput = z.infer<typeof strandSchema>;
+export type ServiceInput = z.infer<typeof serviceSchema>;
 
-interface AppStrandFormProps {
-    data?: Strand;
+interface AppServicesFormProps {
+    data?: Service;
     isOpen: boolean;
     onClose: () => void;
     queryClient: QueryClient;
 }
 
-const AppStrandForm: FC<AppStrandFormProps> = ({ data, isOpen, onClose, queryClient }) => {
+const AppServicesForm: FC<AppServicesFormProps> = ({ data, isOpen, onClose, queryClient }) => {
     const [loading, setLoading] = useState(false);
 
-    const form = useForm<StrandInput>({
-        resolver: zodResolver(strandSchema),
+    const form = useForm<ServiceInput>({
+        resolver: zodResolver(serviceSchema),
         defaultValues: {
             id: data?.id,
             name: data?.name || '',
-            acronym: data?.acronym || '',
+            description: data?.description || '',
         },
     });
 
@@ -50,32 +51,32 @@ const AppStrandForm: FC<AppStrandFormProps> = ({ data, isOpen, onClose, queryCli
         if (data) {
             form.reset({
                 name: data.name,
-                acronym: data.acronym,
+                description: data.description,
             });
         }
     }, [data, form]);
 
-    const { mutate: createStrand, isPending: isCreating } = useCreateStrand();
-    const { mutate: updateStrand, isPending: isUpdating } = useUpdateStrand();
+    const { mutate: createService, isPending: isCreating } = useCreateService();
+    const { mutate: updateService, isPending: isUpdating } = useUpdateService();
 
-    const onSubmit = async (formData: StrandInput) => {
+    const onSubmit = async (formData: ServiceInput) => {
         setLoading(true);
 
         if (data && data.id) {
-            await updateStrand(
-                { id: data.id, strandData: formData },
+            await updateService(
+                { id: data.id, serviceData: formData },
                 {
                     onSettled: () => {
                         onClose();
-                        queryClient.invalidateQueries({ queryKey: ['strands'] });
+                        queryClient.invalidateQueries({ queryKey: ['services'] });
                     },
                 }
             );
         } else {
-            await createStrand(formData, {
+            await createService(formData, {
                 onSettled: () => {
                     onClose();
-                    queryClient.invalidateQueries({ queryKey: ['strands'] });
+                    queryClient.invalidateQueries({ queryKey: ['services'] });
                 },
             });
         }
@@ -86,7 +87,7 @@ const AppStrandForm: FC<AppStrandFormProps> = ({ data, isOpen, onClose, queryCli
         <AlertDialog open={isOpen}>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>{data ? 'Edit Strand' : 'Add Strand'}</AlertDialogTitle>
+                    <AlertDialogTitle>{data ? 'Edit Service' : 'Add Service'}</AlertDialogTitle>
                 </AlertDialogHeader>
                 <div style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                     <Form {...form}>
@@ -106,12 +107,12 @@ const AppStrandForm: FC<AppStrandFormProps> = ({ data, isOpen, onClose, queryCli
                             />
                             <FormField
                                 control={form.control}
-                                name='acronym'
+                                name='description'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Acrnoym</FormLabel>
+                                        <FormLabel>Description</FormLabel>
                                         <FormControl>
-                                            <Input type='text' {...field} />
+                                            <Textarea {...field} rows={4} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -131,4 +132,4 @@ const AppStrandForm: FC<AppStrandFormProps> = ({ data, isOpen, onClose, queryCli
     );
 };
 
-export default AppStrandForm;
+export default AppServicesForm;

@@ -5,6 +5,8 @@ import {
   Users,
   Route,
   Inbox,
+  Briefcase,
+  List
 } from 'lucide-react';
 
 interface Route {
@@ -29,6 +31,22 @@ const routes: Route[] = [
     title: 'Message',
     icon: <Inbox />,
     roles: ['admin', 'user'],
+    isSidebarVisible: true,
+    child_routes: [],
+  },
+  {
+    route: '/discover-freelancers',
+    title: 'Discover Freelancers',
+    icon: <Briefcase />,
+    roles: ['admin', 'user'],
+    isSidebarVisible: true,
+    child_routes: [],
+  },
+  {
+    route: '/services',
+    title: 'Services',
+    icon: <List />,
+    roles: ['admin'],
     isSidebarVisible: true,
     child_routes: [],
   },

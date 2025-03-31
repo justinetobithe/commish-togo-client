@@ -86,7 +86,7 @@ const AppUserForm: FC<AppUserFormProps> = ({ data, isOpen, onClose, queryClient 
     const onSubmit = async (formData: UserInput) => {
         setLoading(true);
         if (data && data.id) {
-            await updateUser({ id: data.id, userData: formData }, {
+            await updateUser({ id: data.id as string, userData: formData }, {
                 onSettled: () => {
                     onClose();
                     queryClient.invalidateQueries({ queryKey: ['users'] });

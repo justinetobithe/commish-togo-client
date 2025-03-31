@@ -1,4 +1,4 @@
-import { Strand } from "./Strand";
+import { Strand } from "./Service";
 import User from "./User";
 
 export interface Student {

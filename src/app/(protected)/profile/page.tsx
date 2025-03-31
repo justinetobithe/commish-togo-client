@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import User from '@/types/User';
 import { api } from '@/lib/api';
-import ProfileForm from './components/ProfileForm';
+import ProfileTabs from './components/ProfileTabs';
 
 const Page = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -22,8 +22,8 @@ const Page = () => {
 
   return (
     <>
-      <h1 className='text-[2rem] font-bold'>Edit Profile</h1>
-      {user ? <ProfileForm user={user as User} /> : ""}
+      <h1 className='text-[2rem] font-bold'>Your Profile</h1>
+      {user ? <ProfileTabs user={user as User} /> : ""}
     </>
   );
 };

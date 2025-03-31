@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import AppStudentsTable from '@/components/AppStudentsTable';
 import { Button } from '@/components/ui/button';
 import { Plus } from "lucide-react";
-import AppStrandForm from '@/components/AppStrandForm';
+import AppStrandForm from '@/components/AppServicesForm';
 import { useQueryClient } from '@tanstack/react-query';
 
 

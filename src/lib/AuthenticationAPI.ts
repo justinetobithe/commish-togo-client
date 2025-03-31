@@ -44,19 +44,27 @@ export const loginWithGoogle = async (
   }
 };
 
-export const register = async (
-  inputs: RegisterInputs,
-): Promise<Response> => {
+export const register = async (inputs: RegisterInputs): Promise<Response> => {
   const fd = new FormData();
-  for (const item in inputs) {
-    fd.append(item, inputs[item as keyof RegisterInputs]);
+
+  for (const key in inputs) {
+    const value = inputs[key as keyof RegisterInputs];
+
+    if (value !== undefined && value !== null) { 
+      if (value instanceof File) {
+        fd.append(key, value, value.name);
+      } else {
+        fd.append(key, value as string); 
+      }
+    }
   }
 
-  const { data } = await api.post<Response>('/api/auth/register', fd, {
+  const { data } = await api.post<Response>('/api/register', fd, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+
   return data;
 };
 
@@ -90,7 +98,8 @@ export const useRegister = () => {
             variant: 'destructive',
           });
         } else {
-          router.refresh();
+          // router.refresh();
+          router.push('/login');
         }
       }, 1000);
     },

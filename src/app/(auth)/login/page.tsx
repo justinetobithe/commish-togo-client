@@ -16,7 +16,7 @@ const Page: FC = async () => {
 
   return (
     <div className="flex h-screen">
-      <div className="w-1/2 flex justify-center items-center bg-white">
+      <div className="md:w-1/2 hidden md:flex justify-center items-center bg-white">
         <Image
           src={Freelancer}
           alt="Banner Image"
@@ -25,7 +25,7 @@ const Page: FC = async () => {
         />
       </div>
 
-      <div className="w-1/2 flex flex-col justify-center items-center bg-white">
+      <div className="md:w-1/2 w-full flex flex-col justify-center items-center bg-white">
         <div className="w-full text-center mb-4">
           <Image
             src={Logo}

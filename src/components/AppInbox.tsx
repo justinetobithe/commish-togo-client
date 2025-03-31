@@ -17,7 +17,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Input } from './ui/input';
 import { Message } from '@/types/Message';
 import User from '@/types/User';
-import { getUsers } from '@/lib/UsersAPI';
 
 const inputSchema = z.object({
     content: z.string().min(1, { message: 'Message cannot be empty' }),
@@ -26,7 +25,11 @@ const inputSchema = z.object({
 export type MessageInputs = z.infer<typeof inputSchema>;
 
 const AppInbox: FC = () => {
-    const [users, setUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<any[]>([
+        { id: 1, first_name: 'LeBron', last_name: 'James', email: 'lebron@nba.com', image: '/path/to/lebron.jpg', latest_message: 'Hey, I will be in town tomorrow.', last_message_time: '2025-02-18T08:00:00Z' },
+        { id: 2, first_name: 'Stephen', last_name: 'Curry', email: 'stephen@nba.com', image: '/path/to/curry.jpg', latest_message: 'Got your message, will reply later.', last_message_time: '2025-02-17T18:45:00Z' },
+        { id: 3, first_name: 'Kevin', last_name: 'Durant', email: 'kevin@nba.com', image: '/path/to/durant.jpg', latest_message: 'Can’t wait to catch up!', last_message_time: '2025-02-18T12:30:00Z' }
+    ]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const messageListRef = useRef<HTMLLIElement | null>(null);
@@ -34,26 +37,6 @@ const AppInbox: FC = () => {
     const { data: session } = useSession();
     const { mutate: sendMessage } = useSendMessage();
     const form = useForm<MessageInputs>({ resolver: zodResolver(inputSchema) });
-
-    /* FETCH USERS */
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const users = await getUsers();
-            setUsers(users);
-        };
-        fetchUsers();
-    }, []);
-
-    /* FETCH MESSAGES */
-    useEffect(() => {
-        if (selectedUser) {
-            const fetchMessages = async () => {
-                const messages = await getMessages(selectedUser.id!.toString());
-                setMessages(messages);
-            };
-            fetchMessages();
-        }
-    }, [selectedUser]);
 
     const onSubmit = (data: MessageInputs) => {
         if (!selectedUser) return;
@@ -69,15 +52,14 @@ const AppInbox: FC = () => {
     };
 
     return (
-        <div className='flex h-screen border rounded-lg overflow-hidden'>
-            {/* User List Sidebar */}
+        <div className='flex h-1/2 border rounded-lg overflow-hidden'>
             <div className='w-1/3 bg-gray-100 border-r p-4'>
                 <h2 className='text-lg font-bold mb-4'>Users</h2>
                 <ul>
                     {users.map((user) => (
                         <li
                             key={user.id}
-                            className={`p-2 cursor-pointer rounded-lg ${selectedUser?.id === user.id ? 'bg-primary text-white' : 'hover:bg-gray-200'}`}
+                            className={`p-2 cursor-pointer rounded-lg ${selectedUser?.id === user.id ? 'border-primary bg-gray-200' : 'hover:bg-gray-200'}`}
                             onClick={() => setSelectedUser(user)}
                         >
                             <div className='flex items-center space-x-3'>
@@ -86,15 +68,18 @@ const AppInbox: FC = () => {
                                     <AvatarFallback>
                                         {user.first_name.charAt(0).toUpperCase()}
                                     </AvatarFallback>
-                                </Avatar>1
-                                <span>{user.first_name}</span>
+                                </Avatar>
+                                <div className='flex flex-col'>
+                                    <span>{user.first_name} {user.last_name}</span>
+                                    <span className='text-sm text-gray-500'>{user.email}</span>
+                                    <span className='text-xs text-gray-400'>{`${moment(user.last_message_time).fromNow()}: ${user.latest_message}`}</span>
+                                </div>
                             </div>
                         </li>
                     ))}
                 </ul>
             </div>
 
-            {/* Chat Section */}
             <div className='w-2/3 flex flex-col'>
                 {selectedUser ? (
                     <>

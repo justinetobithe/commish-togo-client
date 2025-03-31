@@ -1,17 +1,17 @@
 import { api } from '@/lib/api';
 import { toast } from '@/components/ui/use-toast';
 import Response from '@/types/Response';
-import { Strand } from '@/types/Strand';
+import { Service } from '@/types/Service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const getStrands = async (
+export const getServices = async (
     page: number = 1,
     pageSize: number = 10,
     filter = '',
     sortColumn = '',
     sortDesc = false
-): Promise<{ data: Strand[]; last_page: number }> => {
-    const response = await api.get<{ data: { data: Strand[]; current_page: number; last_page: number; total: number } }>(`/api/strands`, {
+): Promise<{ data: Service[]; last_page: number }> => {
+    const response = await api.get<{ data: { data: Service[]; current_page: number; last_page: number; total: number } }>(`/api/services`, {
         params: {
             page,
             ...(pageSize && { page_size: pageSize }),
@@ -29,22 +29,22 @@ export const getStrands = async (
     };
 };
 
-export const createStrand = async (inputs: Strand): Promise<Response> => {
-    const response = await api.post<Response>(`/api/strand`, inputs);
+export const createService = async (inputs: Service): Promise<Response> => {
+    const response = await api.post<Response>(`/api/service`, inputs);
     return response.data;
 };
 
-export const updateStrand = async (id: number, inputs: Strand): Promise<Response> => {
-    const response = await api.put<Response>(`/api/strand/${id}`, inputs);
+export const updateService = async (id: number, inputs: Service): Promise<Response> => {
+    const response = await api.put<Response>(`/api/service/${id}`, inputs);
     return response.data;
 };
 
-export const deleteStrand = async (id: number): Promise<Response> => {
-    const response = await api.delete(`/api/strand/${id}`);
+export const deleteService = async (id: number): Promise<Response> => {
+    const response = await api.delete(`/api/service/${id}`);
     return response.data;
 };
 
-export const useStrands = (
+export const useServices = (
     page: number = 1,
     pageSize: number = 10,
     globalFilter = '',
@@ -52,22 +52,21 @@ export const useStrands = (
     sortDesc = false
 ) =>
     useQuery({
-        queryKey: ['strands', page, pageSize, globalFilter, sortColumn, sortDesc],
-        queryFn: async (): Promise<{ data: Strand[]; last_page: number }> => {
-            return await getStrands(page, pageSize, globalFilter, sortColumn, sortDesc);
+        queryKey: ['services', page, pageSize, globalFilter, sortColumn, sortDesc],
+        queryFn: async (): Promise<{ data: Service[]; last_page: number }> => {
+            return await getServices(page, pageSize, globalFilter, sortColumn, sortDesc);
         },
     });
 
-export const useCreateStrand = () => {
+export const useCreateService = () => {
     const queryClient = useQueryClient();
-    ``
     return useMutation({
-        mutationFn: async (inputs: Strand) => {
-            return await createStrand(inputs);
+        mutationFn: async (inputs: Service) => {
+            return await createService(inputs);
         },
         onSuccess: (response) => {
             if (response && response.status === "success") {
-                queryClient.invalidateQueries({ queryKey: ['strands'] });
+                queryClient.invalidateQueries({ queryKey: ['services'] });
                 toast({
                     variant: 'success',
                     description: response.message,
@@ -77,10 +76,10 @@ export const useCreateStrand = () => {
     });
 };
 
-export const useUpdateStrand = () => {
+export const useUpdateService = () => {
     return useMutation({
-        mutationFn: async ({ id, strandData }: { id: number; strandData: Strand }) => {
-            return await updateStrand(id, strandData);
+        mutationFn: async ({ id, serviceData }: { id: number; serviceData: Service }) => {
+            return await updateService(id, serviceData);
         },
         onSuccess: (response) => {
             if (response && response.status === "success") {
@@ -93,10 +92,10 @@ export const useUpdateStrand = () => {
     });
 };
 
-export const useDeleteStrand = () => {
+export const useDeleteService = () => {
     return useMutation({
         mutationFn: async (id: number) => {
-            return await deleteStrand(id);
+            return await deleteService(id);
         },
         onSuccess: (response) => {
             if (response && response.status === "success") {

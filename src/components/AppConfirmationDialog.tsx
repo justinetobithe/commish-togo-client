@@ -15,11 +15,14 @@ const AppConfirmationDialog: FC<{
   title?: string;
   description?: string | React.ReactNode;
   buttonElem: ReactNode;
+  cancelButton?: boolean;
   handleDialogAction?: () => void;
+  
 }> = ({
   title = 'Are you absolutely sure?',
   description = 'This action cannot be undone. This will permanently delete your account and remove your data from our servers.',
   buttonElem,
+  cancelButton = true,
   handleDialogAction,
 }) => {
     return (
@@ -31,7 +34,7 @@ const AppConfirmationDialog: FC<{
             <AlertDialogDescription>{description}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            {cancelButton && <AlertDialogCancel>Cancel</AlertDialogCancel>}
             <AlertDialogAction onClick={handleDialogAction}>
               Continue
             </AlertDialogAction>

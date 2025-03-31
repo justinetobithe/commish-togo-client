@@ -1,5 +1,6 @@
-export const MAX_FILE_SIZE = 5;
+export const MAX_FILE_SIZE = 30;
 export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+export const ACCEPTED_FILE_TYPES = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 export const WEEKDAYS = [
   { value: 'SUNDAY', label: 'S', weekDay: 0 },
   { value: 'MONDAY', label: 'M', weekDay: 1 },

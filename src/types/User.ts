@@ -1,3 +1,5 @@
+import { Resume } from "./Resume";
+
 // MAIN
 export default interface User {
   id: number | string | null;
@@ -13,6 +15,10 @@ export default interface User {
   token?: string;
   email_verified?: Date | null;
   status?: number;
+  student_id?: string | null;
+
+  resumes?: Resume[]; 
+
 }
 
 

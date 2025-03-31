@@ -59,7 +59,7 @@ const LoginForm: FC = () => {
 
     if (response?.error) {
       toast({
-        title: 'Uh oh! Something went wrong.',    
+        title: 'Uh oh! Something went wrong.',
         description: response.error,
         variant: 'destructive',
       });
