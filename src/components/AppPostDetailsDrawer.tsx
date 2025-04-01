@@ -14,6 +14,7 @@ import { Post } from '@/types/Post';
 import { Heart, MessageCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { api } from '@/lib/api';
+import Image from 'next/image';
 
 interface AppPostDetailsDrawerProps {
     data?: Post;
@@ -24,7 +25,7 @@ interface AppPostDetailsDrawerProps {
 const AppPostDetailsDrawer: FC<AppPostDetailsDrawerProps> = ({ data, isOpen, onClose }) => {
     const [likePosts, setLikePosts] = useState<{ [key: number]: boolean }>({});
     const [relatedPosts, setRelatedPosts] = useState<Post[]>([]);
-    const [activeTab, setActiveTab] = useState<'applicants' | 'comments'>('applicants'); // State for toggling tabs
+    const [activeTab, setActiveTab] = useState<'applicants' | 'comments'>('applicants');
 
     useEffect(() => {
         if (data?.id) {
@@ -106,7 +107,14 @@ const AppPostDetailsDrawer: FC<AppPostDetailsDrawerProps> = ({ data, isOpen, onC
                                     <div key={applicant.id} className="flex items-start mb-3 mt-3">
                                         <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
                                             {applicant.user?.image ? (
-                                                <img src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${applicant.user.image}`} alt="avatar" className="w-full h-full rounded-full" />
+                                                // <img src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${applicant.user.image}`} alt="avatar" className="w-full h-full rounded-full" />
+                                                <Image
+                                                    src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${applicant.user.image}`}
+                                                    alt="avatar"
+                                                    width={100}
+                                                    height={100}
+                                                    className="w-full h-full rounded-full"
+                                                />
                                             ) : (
                                                 <span className="text-white text-lg">{applicant.user?.first_name?.[0]}</span>
                                             )}
@@ -129,7 +137,14 @@ const AppPostDetailsDrawer: FC<AppPostDetailsDrawerProps> = ({ data, isOpen, onC
                                     <div key={comment.id} className="flex items-start mb-3">
                                         <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
                                             {comment.user?.image ? (
-                                                <img src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${comment.user.image}`} alt="avatar" className="w-full h-full rounded-full" />
+                                                // <img src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${comment.user.image}`} alt="avatar" className="w-full h-full rounded-full" />
+                                                <Image
+                                                    src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${comment.user.image}`}
+                                                    alt="avatar"
+                                                    width={100}
+                                                    height={100}
+                                                    className="rounded-full"
+                                                />
                                             ) : (
                                                 <span className="text-white text-lg">{comment.user?.first_name?.[0]}</span>
                                             )}

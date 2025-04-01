@@ -25,11 +25,11 @@ const inputSchema = z.object({
 export type MessageInputs = z.infer<typeof inputSchema>;
 
 const AppInbox: FC = () => {
-    const [users, setUsers] = useState<any[]>([
-        { id: 1, first_name: 'LeBron', last_name: 'James', email: 'lebron@nba.com', image: '/path/to/lebron.jpg', latest_message: 'Hey, I will be in town tomorrow.', last_message_time: '2025-02-18T08:00:00Z' },
-        { id: 2, first_name: 'Stephen', last_name: 'Curry', email: 'stephen@nba.com', image: '/path/to/curry.jpg', latest_message: 'Got your message, will reply later.', last_message_time: '2025-02-17T18:45:00Z' },
-        { id: 3, first_name: 'Kevin', last_name: 'Durant', email: 'kevin@nba.com', image: '/path/to/durant.jpg', latest_message: 'Can’t wait to catch up!', last_message_time: '2025-02-18T12:30:00Z' }
-    ]);
+    // const [users, setUsers] = useState<any[]>([
+    //     { id: 1, first_name: 'LeBron', last_name: 'James', email: 'lebron@nba.com', image: '/path/to/lebron.jpg', latest_message: 'Hey, I will be in town tomorrow.', last_message_time: '2025-02-18T08:00:00Z' },
+    //     { id: 2, first_name: 'Stephen', last_name: 'Curry', email: 'stephen@nba.com', image: '/path/to/curry.jpg', latest_message: 'Got your message, will reply later.', last_message_time: '2025-02-17T18:45:00Z' },
+    //     { id: 3, first_name: 'Kevin', last_name: 'Durant', email: 'kevin@nba.com', image: '/path/to/durant.jpg', latest_message: 'Can’t wait to catch up!', last_message_time: '2025-02-18T12:30:00Z' }
+    // ]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const messageListRef = useRef<HTMLLIElement | null>(null);
@@ -55,7 +55,7 @@ const AppInbox: FC = () => {
         <div className='flex h-1/2 border rounded-lg overflow-hidden'>
             <div className='w-1/3 bg-gray-100 border-r p-4'>
                 <h2 className='text-lg font-bold mb-4'>Users</h2>
-                <ul>
+                {/* <ul>
                     {users.map((user) => (
                         <li
                             key={user.id}
@@ -77,11 +77,11 @@ const AppInbox: FC = () => {
                             </div>
                         </li>
                     ))}
-                </ul>
+                </ul> */}
             </div>
 
             <div className='w-2/3 flex flex-col'>
-                {selectedUser ? (
+                {/* {selectedUser ? (
                     <>
                         <div className='p-4 border-b flex items-center space-x-3'>
                             <Avatar className='h-12 w-12'>
@@ -140,11 +140,11 @@ const AppInbox: FC = () => {
                             </form>
                         </Form>
                     </>
-                ) : (
-                    <div className='flex-1 flex items-center justify-center text-gray-500'>
-                        Select a user to start a conversation
-                    </div>
-                )}
+                ) : ( */}
+                <div className='flex-1 flex items-center justify-center text-gray-500'>
+                    Select a user to start a conversation
+                </div>
+                {/* )} */}
             </div>
         </div>
     );

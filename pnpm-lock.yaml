@@ -88,7 +88,7 @@ importers:
         version: 8.20.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tinymce/tinymce-react':
         specifier: ^6.0.0
-        version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tinymce@7.7.2)
       '@wojtekmaj/react-timerange-picker':
         specifier: ^5.4.4
         version: 5.5.0(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -116,6 +116,9 @@ importers:
       laravel-echo:
         specifier: ^1.15.3
         version: 1.19.0
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       lucide-react:
         specifier: ^0.294.0
         version: 0.294.0(react@18.3.1)
@@ -173,6 +176,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.17)
+      tinymce:
+        specifier: ^7.7.2
+        version: 7.7.2
       vaul:
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3801,6 +3807,9 @@ packages:
   tiny-warning@1.0.3:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
 
+  tinymce@7.7.2:
+    resolution: {integrity: sha512-GX7Jd0ac9ph3QM2yei4uOoxytKX096CyG6VkkgQNikY39T6cDldoNgaqzHHlcm62WtdBMCd7Ch+PYaRnQo+NLA==}
+
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
@@ -5681,11 +5690,13 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@tinymce/tinymce-react@6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@tinymce/tinymce-react@6.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tinymce@7.7.2)':
     dependencies:
       prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+    optionalDependencies:
+      tinymce: 7.7.2
 
   '@types/express-serve-static-core@4.17.28':
     dependencies:
@@ -8144,6 +8155,8 @@ snapshots:
   throttle-debounce@3.0.1: {}
 
   tiny-warning@1.0.3: {}
+
+  tinymce@7.7.2: {}
 
   to-regex-range@5.0.1:
     dependencies:

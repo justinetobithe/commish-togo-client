@@ -9,8 +9,9 @@ import {
     Form, FormControl, FormDescription, FormField, FormItem,
     FormLabel,
     FormMessage,
-} from '@/components/ui/form';
+} from '@/components/ui/form'; 
 import { Editor } from '@tinymce/tinymce-react';
+import { Editor as TinyMCEEditor } from 'tinymce';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
@@ -47,7 +48,7 @@ interface AppJobApplicationFormProps {
 
 const AppJobApplicationForm: FC<AppJobApplicationFormProps> = ({ post, data, isOpen, onClose, queryClient }) => {
     const [loading, setLoading] = useState(false);
-    const editorRef = useRef<Editor | null>(null);
+    const editorRef = useRef<TinyMCEEditor | null>(null);
     const [user, setUser] = useState<User | null>(null);
 
     const [resumes, setResumes] = useState<Resume[]>([]);
@@ -100,13 +101,13 @@ const AppJobApplicationForm: FC<AppJobApplicationFormProps> = ({ post, data, isO
                 resume_id: data?.resume_id || undefined,
             });
         }
-    }, [data, form]);
+    }, [data, form, post?.id, user]);
 
     const { mutate: createJobApplication, isPending: isCreating } = useCreateJobApplication();
     const { mutate: updateJobApplication, isPending: isUpdating } = useUpdateJobApplication();
 
     const onSubmit = async (formData: JobApplicationInput) => {
-        formData.cover_letter = (editorRef.current as any)?.getContent() || "";
+        formData.cover_letter = editorRef.current?.getContent() || "";
         setLoading(true);
 
         if (data?.id) {
@@ -140,33 +141,38 @@ const AppJobApplicationForm: FC<AppJobApplicationFormProps> = ({ post, data, isO
                         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
 
                             <div className="text-xl font-bold mb-2">Cover Letter</div>
-                            <Editor
-                                className="form-control"
-                                apiKey="rmaraoxct4iqpbk2ur478gvlxmdpuekuur95ua0latdnclkq"
-                                placeholder=""
-                                onInit={(evt: any, editor: any) => {
-                                    editorRef.current = editor;
-                                    editor.setContent(form.getValues('cover_letter') || "");
-                                }}
-                                initialValue={data?.cover_letter || ""}
-                                onEditorChange={(newCoverLetter: string) => {
-                                    form.setValue("cover_letter", newCoverLetter, { shouldDirty: true, shouldValidate: true });
-                                }}
-                                init={{
-                                    height: 500,
-                                    menubar: 'view edit format table',
-                                    plugins: [
-                                        'advlist autolink lists link image charmap print preview anchor',
-                                        'searchreplace visualblocks code fullscreen',
-                                        'insertdatetime media table paste code help wordcount'
-                                    ],
-                                    toolbar: 'undo redo | formatselect | ' +
-                                        'bold italic backcolor | alignleft aligncenter ' +
-                                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                                        'removeformat | help',
-                                    selector: 'textarea',
-                                }}
-                            />
+                            <div className="form-control">
+                                <Editor
+                                    apiKey="rmaraoxct4iqpbk2ur478gvlxmdpuekuur95ua0latdnclkq"
+                                    // placeholder=""
+                                    // onInit={(evt: any, editor: any) => {
+                                    //     editorRef.current = editor;
+                                    //     editor.setContent(form.getValues('cover_letter') || "");
+                                    // }}
+                                    onInit={(evt, editor) => {
+                                        editorRef.current = editor;
+                                        editor.setContent(form.getValues('cover_letter') || "");
+                                    }}
+                                    initialValue={data?.cover_letter || ""}
+                                    onEditorChange={(newCoverLetter: string) => {
+                                        form.setValue("cover_letter", newCoverLetter, { shouldDirty: true, shouldValidate: true });
+                                    }}
+                                    init={{
+                                        height: 500,
+                                        menubar: 'view edit format table',
+                                        plugins: [
+                                            'advlist autolink lists link image charmap print preview anchor',
+                                            'searchreplace visualblocks code fullscreen',
+                                            'insertdatetime media table paste code help wordcount'
+                                        ],
+                                        toolbar: 'undo redo | formatselect | ' +
+                                            'bold italic backcolor | alignleft aligncenter ' +
+                                            'alignright alignjustify | bullist numlist outdent indent | ' +
+                                            'removeformat | help',
+                                        // selector: 'textarea',
+                                    }}
+                                />
+                            </div>
 
                             <FormField
                                 control={form.control}

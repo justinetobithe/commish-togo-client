@@ -13,13 +13,28 @@ import { useLogout } from "@/lib/AuthenticationAPI";
 import { useRouter } from 'next/navigation';
 import AppNotificationsDropdown from "./AppNotificationsDropdown";
 import { Service } from "@/types/Service";
+import { Notification } from "@/types/Notification";
 import { api } from "@/lib/api";
 
-
-const notifications = [
-  { id: 1, message: "John Doe commented on your post", timestamp: new Date().toISOString() },
-  { id: 2, message: "Jane Smith reacted to your post", timestamp: new Date().toISOString() },
-  { id: 3, message: "Mike Johnson followed you", timestamp: new Date().toISOString() },
+const notifications: Notification[] = [
+  {
+    user_id: 101,
+    title: "John Doe commented on your post",
+    body: "Check out the new comment!",
+    created_at: new Date().toISOString()
+  },
+  {
+    user_id: 102,
+    title: "Jane Smith reacted to your post",
+    body: "Jane loved your post!",
+    created_at: new Date().toISOString()
+  },
+  {
+    user_id: 103,
+    title: "Mike Johnson followed you",
+    body: "You have a new follower!",
+    created_at: new Date().toISOString()
+  }
 ];
 
 const AppHeader = () => {

@@ -5,7 +5,8 @@ import { UserPaginatedData } from '@/types/User';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import User from '@/types/User';
 import { UserInput } from '@/components/AppUserForm';
-import { ProfileFormInputs } from '@/app/(protected)/profile/components/AppProfileForm'
+// import { ProfileFormInputs } from '@/app/(protected)/profile/components/AppProfileForm'
+import { AppProfileFormInputs as ProfileFormInputs } from '@/app/(protected)/profile/components/AppProfileForm';
 import { getServerSession } from 'next-auth';
 import AuthOptions from '@/lib/AuthOptions';
 

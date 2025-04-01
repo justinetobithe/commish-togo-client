@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'commish-togo.xyz',
+        hostname: 'commish-togo.site',
         port: '',
         pathname: '/**',
       },

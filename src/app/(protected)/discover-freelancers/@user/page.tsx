@@ -6,6 +6,7 @@ import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import { MessageCircle, MoreVertical } from "lucide-react";
 import { useGetAllProfiles } from "@/lib/ProfileAPI";
+import Image from 'next/image';
 
 const Page = () => {
     const queryClient = useQueryClient();
@@ -65,9 +66,16 @@ const Page = () => {
                         <div className="flex items-center space-x-4">
                             {
                                 profile?.image ? (
-                                    <img
+                                    // <img
+                                    //     src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${profile.image}`}
+                                    //     alt={`${profile?.first_name} ${profile?.last_name}`}
+                                    //     className="w-14 h-14 rounded-full object-cover"
+                                    // />
+                                    <Image
                                         src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${profile.image}`}
                                         alt={`${profile?.first_name} ${profile?.last_name}`}
+                                        width={56}  // 14 * 4 = 56px
+                                        height={56} // 14 * 4 = 56px
                                         className="w-14 h-14 rounded-full object-cover"
                                     />
                                 ) : (

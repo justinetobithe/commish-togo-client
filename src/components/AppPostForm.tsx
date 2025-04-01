@@ -9,7 +9,8 @@ import {
     Form, FormControl, FormField, FormItem, FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import { Editor } from '@tinymce/tinymce-react'
+import { Editor } from '@tinymce/tinymce-react';
+import { Editor as TinyMCEEditor } from 'tinymce';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useForm, Controller } from 'react-hook-form';
@@ -59,7 +60,7 @@ interface AppPostFormProps {
 
 const AppPostForm: FC<AppPostFormProps> = ({ data, isOpen, onClose, queryClient }) => {
     const [loading, setLoading] = useState(false);
-    const editorRef = useRef<Editor | null>(null);
+    const editorRef = useRef<TinyMCEEditor | null>(null);
     const [services, setServices] = useState<Service[]>([]);
 
     useEffect(() => {
@@ -83,7 +84,7 @@ const AppPostForm: FC<AppPostFormProps> = ({ data, isOpen, onClose, queryClient 
             location: data?.location || '',
             salary: data?.salary || '',
             type: data?.type || '',
-            service_id: data?.tags?.map(service => service.id).filter(id => id !== undefined) ?? [],
+            service_id: data?.tags?.flatMap(service => service.id ? [service.id] : []) ?? [],
             application_deadline: data?.application_deadline ? new Date(data.application_deadline) : null,
         },
     });
@@ -96,9 +97,7 @@ const AppPostForm: FC<AppPostFormProps> = ({ data, isOpen, onClose, queryClient 
                 location: data.location || "",
                 salary: data.salary || "",
                 type: data.type || "",
-                service_id: data.tags
-                    ?.map(service => service.id)
-                    .filter(id => id !== undefined) ?? [],
+                service_id: data?.tags?.flatMap(service => service.id ? [service.id] : []) ?? [],
                 application_deadline: data?.application_deadline ? new Date(data.application_deadline) : null,
             });
         }
@@ -109,7 +108,7 @@ const AppPostForm: FC<AppPostFormProps> = ({ data, isOpen, onClose, queryClient 
 
     const onSubmit = async (formData: PostInput) => {
         if (formData.content) {
-            formData.content = (editorRef.current as any).getContent() || "";
+            formData.content = editorRef.current?.getContent() || "";
         }
 
         setLoading(true);
@@ -154,34 +153,38 @@ const AppPostForm: FC<AppPostFormProps> = ({ data, isOpen, onClose, queryClient 
                                 )}
                             />
 
-                            <Editor
-                                className="form-control"
-                                apiKey="rmaraoxct4iqpbk2ur478gvlxmdpuekuur95ua0latdnclkq"
-                                placeholder=""
-                                onInit={(evt: any, editor: any) => {
-                                    editorRef.current = editor;
-                                    editor.setContent(form.getValues('content') || "");
-                                }}
-                                initialValue={data?.content || ""}
-                                onEditorChange={(newContent: string) => {
-                                    form.setValue("content", newContent, { shouldDirty: true, shouldValidate: true });
-                                }}
-                                init={{
-                                    height: 500,
-                                    menubar: 'view edit format table',
-                                    plugins: [
-                                        'advlist autolink lists link image charmap print preview anchor',
-                                        'searchreplace visualblocks code fullscreen',
-                                        'insertdatetime media table paste code help wordcount'
-                                    ],
-                                    toolbar: 'undo redo | formatselect | ' +
-                                        'bold italic backcolor | alignleft aligncenter ' +
-                                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                                        'removeformat | help',
-                                    selector: 'textarea',
-
-                                }}
-                            />
+                            <div className="form-control">
+                                <Editor
+                                    apiKey="rmaraoxct4iqpbk2ur478gvlxmdpuekuur95ua0latdnclkq"
+                                    // placeholder=""
+                                    // onInit={(evt: any, editor: any) => {
+                                    //     editorRef.current = editor;
+                                    //     editor.setContent(form.getValues('content') || "");
+                                    // }}
+                                    onInit={(evt, editor) => {
+                                        editorRef.current = editor;
+                                        editor.setContent(form.getValues('content') || "");
+                                    }}
+                                    initialValue={data?.content || ""}
+                                    onEditorChange={(newContent: string) => {
+                                        form.setValue("content", newContent, { shouldDirty: true, shouldValidate: true });
+                                    }}
+                                    init={{
+                                        height: 500,
+                                        menubar: 'view edit format table',
+                                        plugins: [
+                                            'advlist autolink lists link image charmap print preview anchor',
+                                            'searchreplace visualblocks code fullscreen',
+                                            'insertdatetime media table paste code help wordcount'
+                                        ],
+                                        toolbar: 'undo redo | formatselect | ' +
+                                            'bold italic backcolor | alignleft aligncenter ' +
+                                            'alignright alignjustify | bullist numlist outdent indent | ' +
+                                            'removeformat | help',
+                                        // selector: 'textarea', 
+                                    }}
+                                />
+                            </div>
 
                             <FormField
                                 control={form.control}
