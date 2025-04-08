@@ -43,9 +43,7 @@ const AppHeader = () => {
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const logout = useLogout();
-
   const [services, setServices] = useState<Service[]>([]);
-
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -76,29 +74,28 @@ const AppHeader = () => {
   };
 
   return (
-    <ul className='flex items-center justify-between bg-white px-5 py-3 shadow-md'>
+    <ul className='flex flex-wrap items-center justify-between bg-white px-5 py-3 shadow-md gap-3 sm:flex-nowrap'>
       <li className='flex items-center'>
         <AppNavBurger />
-        <div className='flex items-center space-x-10'>
+        <div className='flex items-center space-x-4 sm:space-x-10'>
           <Link href='/home' className='flex items-center space-x-2'>
             <Image src={Logo} width={48} height={48} alt='Logo' />
             <span className='text-[1.25rem] font-bold'>Commish Togo</span>
           </Link>
         </div>
-
       </li>
-
-      <li className='ml-[300px] inline-block relative'>
+      
+      <li className='hidden sm:block md:w-full relative md:ml-[300px] md:inline-block'>
         <button
-          className="flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-md"
+          className="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-primary text-white font-semibold rounded-md"
           onClick={toggleServicesDropdown}
         >
           Services <ChevronDown className="ml-2 w-4 h-4" />
         </button>
         {servicesDropdownOpen && (
-          <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-[900px] py-4 z-[9999] border">
+          <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-full sm:w-[900px] py-4 z-[9999] border">
             {services.length > 0 ? (
-              <div className="grid grid-cols-5 gap-3 px-4">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 px-4">
                 {services.map((service) => (
                   <Link
                     key={service.id}
@@ -118,7 +115,6 @@ const AppHeader = () => {
 
       <li className='ml-auto inline-block'>
         <div className='flex items-center space-x-3'>
-
           <AppNotificationsDropdown notifications={notifications} />
 
           <span className='hidden text-[0.8rem] font-bold sm:inline'>
@@ -156,7 +152,7 @@ const AppHeader = () => {
           </div>
         </div>
       </li>
-    </ul>
+    </ul >
   );
 };
 

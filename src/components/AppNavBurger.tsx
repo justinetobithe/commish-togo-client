@@ -11,13 +11,14 @@ const AppNavBurger = () => {
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
-      if (typeof window !== 'undefined')
+      if (typeof window !== 'undefined') {
         setDimensions({
           width: window.innerWidth,
           height: window.innerHeight,
         });
+      }
     };
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -31,12 +32,15 @@ const AppNavBurger = () => {
     }
   }, [toggleIsSidebarOpen, dimensions]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      document.body.style.overflow = isSidebarOpen ? 'hidden' : 'auto';
+    }
+  }, [isSidebarOpen]);
+
   return (
     <Button
-      data-drawer-target='default-sidebar'
-      data-drawer-toggle='default-sidebar'
-      aria-controls='default-sidebar'
-      className='mr-3 px-2 sm:hidden'
+      className="mr-3 px-2 sm:hidden"
       onClick={() => toggleIsSidebarOpen(!isSidebarOpen)}
     >
       <Menu />
