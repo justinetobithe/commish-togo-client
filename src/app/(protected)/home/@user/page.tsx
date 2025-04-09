@@ -124,14 +124,14 @@ const Page = () => {
                     </>
                   )}
 
-                  {post.user?.id === user?.id && (
+                  {post.user?.id === user?.id && (!post.application_deadline || new Date(post.application_deadline) > new Date()) && (
                     <button
                       onClick={(event) => handleEditPost(post, event)}
                       className="text-gray-400 hover:text-blue-500"
                     >
                       <Pen className="w-5 h-5 text-gray-400 hover:text-primary" />
                     </button>
-                  )}
+                  )} 
                 </div>
 
                 <h2 className="text-lg font-semibold mt-6">{post.title}</h2>

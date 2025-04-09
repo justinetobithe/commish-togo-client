@@ -9,6 +9,7 @@ import { UserInput } from '@/components/AppUserForm';
 import { AppProfileFormInputs as ProfileFormInputs } from '@/app/(protected)/profile/components/AppProfileForm';
 import { getServerSession } from 'next-auth';
 import AuthOptions from '@/lib/AuthOptions';
+import Notification from '@/types/Notification';
 
 export const getUsers = async (
   page: number = 1,
@@ -34,6 +35,25 @@ export const getUsers = async (
     last_page: data?.last_page
   };
 };
+
+export const getUserNotificaitons = async (
+  user_id: string | number | null,
+): Promise<Notification[]> => {
+  const { data } = await api.get<Notification[]>(`/api/user/${user_id}/notifications`);
+  return data;
+};
+
+
+export const useGetUserNotifications = (
+  userId: number | string | null = null,
+) =>
+  useQuery({
+    queryKey: ['user-notifications'],
+    queryFn: async (): Promise<Notification[]> => {
+      return await getUserNotificaitons(userId);
+    },
+    enabled: !!userId
+  });
 
 export const useUsers = (
   page: number = 1,

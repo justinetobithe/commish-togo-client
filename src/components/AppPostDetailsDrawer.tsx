@@ -15,6 +15,7 @@ import { Heart, MessageCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { api } from '@/lib/api';
 import Image from 'next/image';
+import User from '@/types/User';
 
 interface AppPostDetailsDrawerProps {
     data?: Post;
@@ -26,6 +27,21 @@ const AppPostDetailsDrawer: FC<AppPostDetailsDrawerProps> = ({ data, isOpen, onC
     const [likePosts, setLikePosts] = useState<{ [key: number]: boolean }>({});
     const [relatedPosts, setRelatedPosts] = useState<Post[]>([]);
     const [activeTab, setActiveTab] = useState<'applicants' | 'comments'>('applicants');
+
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const { data } = await api.get<{ data: User }>("/api/me");
+                setUser(data.data);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     useEffect(() => {
         if (data?.id) {
@@ -107,7 +123,6 @@ const AppPostDetailsDrawer: FC<AppPostDetailsDrawerProps> = ({ data, isOpen, onC
                                     <div key={applicant.id} className="flex items-start mb-3 mt-3">
                                         <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
                                             {applicant.user?.image ? (
-                                                // <img src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${applicant.user.image}`} alt="avatar" className="w-full h-full rounded-full" />
                                                 <Image
                                                     src={`${process.env.NEXT_PUBLIC_API_URL || ''}/storage/image/${applicant.user.image}`}
                                                     alt="avatar"
@@ -121,13 +136,23 @@ const AppPostDetailsDrawer: FC<AppPostDetailsDrawerProps> = ({ data, isOpen, onC
                                         </div>
                                         <div className="flex-1">
                                             <div className="flex justify-between items-center">
-                                                <span className="font-semibold">{applicant.user?.first_name} {applicant.user?.last_name}</span>
-                                                <span className="text-sm text-gray-500">{formatDistanceToNow(new Date(applicant.created_at!))} ago</span>
+                                                <span className="font-semibold">
+                                                    {applicant.user?.first_name} {applicant.user?.last_name}
+                                                </span>
+                                                <span className="text-sm text-gray-500">
+                                                    {formatDistanceToNow(new Date(applicant.created_at!))} ago
+                                                </span>
                                             </div>
+                                            {applicant.user?.id === user?.id ? (
+                                                <p className="text-sm text-green-500">You applied</p>
+                                            ) : (
+                                                <p className="text-sm">has applied</p>
+                                            )} 
                                         </div>
                                     </div>
                                 ))}
                             </div>
+
                         )}
 
                         {activeTab === 'comments' && (

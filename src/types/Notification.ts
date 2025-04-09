@@ -1,12 +1,14 @@
-import User from "./User";
-
-export interface Notification {
-    id?: number;
-    user_id: number;
-    title?: string;
-    body?: string;
-    action_url?: string;
-    created_at: string;
-
-    user?: User
+export default interface Notification {
+    id: string
+    type: string
+    notifiable_type: string
+    notifiable_id: number
+    data: {
+        user: string
+        message: string
+        created_at: string
+    }
+    read_at: any
+    created_at: string
+    updated_at: string
 }

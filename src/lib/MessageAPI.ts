@@ -1,4 +1,4 @@
-import { MessageInputs } from '@/components/AppInbox';
+import { MessageInputs } from '@/components/AppChatModal';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { Message } from '@/types/Message';
