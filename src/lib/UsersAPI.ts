@@ -13,7 +13,7 @@ import Notification from '@/types/Notification';
 
 export const getUsers = async (
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number|null = 10,
   filter = '',
   sortColumn = '',
   sortDesc = false
@@ -31,7 +31,7 @@ export const getUsers = async (
   const { data } = response.data;
 
   return {
-    data: data.data,
+    data: data.data ?? data,
     last_page: data?.last_page
   };
 };
@@ -43,6 +43,10 @@ export const getUserNotificaitons = async (
   return data;
 };
 
+export const markAsRead = async (id: string | number): Promise<Response> => {
+  const response = await api.post<Response>(`/api/user/notifications/mark-as-read/${id}`);
+  return response.data;
+};
 
 export const useGetUserNotifications = (
   userId: number | string | null = null,
@@ -55,18 +59,22 @@ export const useGetUserNotifications = (
     enabled: !!userId
   });
 
+export const useMarkAsRead = () => useMutation({
+  mutationFn: async (params: { id: string | number }) => {
+    return await markAsRead(params.id)
+  }
+})
+
 export const useUsers = (
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number|null = 10,
   globalFilter = '',
   sortColumn = '',
   sortDesc = false
 ) =>
   useQuery({
     queryKey: ['users', page, pageSize, globalFilter, sortColumn, sortDesc],
-    queryFn: async (): Promise<UserPaginatedData> => {
-      return await getUsers(page, pageSize, globalFilter, sortColumn, sortDesc);
-    },
+    queryFn: async () => getUsers(page, pageSize, globalFilter, sortColumn, sortDesc)
   });
 
 export const createUser = async (inputs: UserInput): Promise<Response> => {
