@@ -1,14 +1,15 @@
 import { api } from '@/lib/api'
 import Echo from 'laravel-echo'
 import Pusher from 'pusher-js'
+import { PUSHER_API_KEY, PUSHER_CLUSTER } from '@/utils/config'
 
-export const laravelEcho = (namespace: string) =>
+export const laravelEcho = (namespace: string = 'App.Events') =>
     new Echo({
         broadcaster: 'pusher',
-        key: "8581aba0bfe53dec0e52",
+        key: PUSHER_API_KEY,
         namespace: namespace,
-        client: new Pusher("8581aba0bfe53dec0e52", {
-            cluster: "ap4",
+        client: new Pusher(PUSHER_API_KEY, {
+            cluster: PUSHER_CLUSTER,
             forceTLS: true,
             authorizer: channel => {
                 return {
